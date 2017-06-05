@@ -6,6 +6,8 @@ and spit out their links. It then pauses to let you review those PRs and asks
 you for a title. Finally, it will use [hub][hub] to create the deploy PR and
 gives you a link to it.
 
+[hub]: https://github.com/github/hub
+
 ## Install
 
 The easiest way to install is via homebrew:
