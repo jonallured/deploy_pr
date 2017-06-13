@@ -3,6 +3,9 @@
 # get project name
 project=$(git remote show upstream | grep Fetch | sed 's/.*github.com\/\(artsy\/.*\)\.git/\1/')
 
+# fetch latest upstream to local
+git fetch upstream
+
 # show included PRs
 prs=$(git log upstream/release...upstream/master --merges --oneline --grep 'from artsy/master' --invert-grep | grep 'Merge pull request' | cut -d ' ' -f 5 | cut -d '#' -f 2)
 
