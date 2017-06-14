@@ -32,4 +32,4 @@ read -p 'title: ' title
 
 # create deploy PR
 message="Deploy: $title\n\n$body"
-echo $message | hub pull-request -b $project:release -h $project:master -F -
+echo $message | hub pull-request -b $project:release -h $project:master -l deploy -F -
