@@ -13,7 +13,7 @@ if ! command -v hub > /dev/null; then
 fi
 
 # get project name
-project=$(git remote show upstream | grep Fetch | sed 's/.*github.com\/\(artsy\/.*\)\.git/\1/')
+project=$(basename "$PWD")
 
 # fetch latest upstream to local
 git fetch upstream
