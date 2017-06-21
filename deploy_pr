@@ -13,10 +13,10 @@ if ! command -v hub > /dev/null; then
 fi
 
 # get project name
-project=$(basename "$PWD")
+project=artsy/$(basename "$PWD")
 
 # fetch latest upstream to local
-git fetch upstream
+git fetch upstream --quiet
 
 # show included PRs
 prs=$(git log upstream/release...upstream/master --merges --oneline --grep 'from artsy/master' --invert-grep | grep 'Merge pull request' | cut -d ' ' -f 5 | cut -d '#' -f 2)
