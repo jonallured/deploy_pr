@@ -12,6 +12,13 @@ if ! command -v hub > /dev/null; then
   exit 2
 fi
 
+# ensure there's an upstream remote
+git remote | grep upstream --quiet
+if [ $? -ne 0 ] ; then
+  echo 'Please set an upstream remote'
+  exit 3
+fi
+
 # get project name
 project=artsy/$(basename "$PWD")
 
