@@ -2,14 +2,34 @@
 
 # ensure we're in a git repo
 if ! [ -d .git ]; then
-  echo 'Please run from a git repo'
+  echo 'Please run from a git repo.'
   exit 1
 fi
 
 # ensure hub is installed
 if ! command -v hub > /dev/null; then
-  echo 'Please brew install hub'
+  echo 'Please brew install hub.'
   exit 2
+fi
+
+# ensure there's an upstream remote
+git remote | grep upstream --quiet
+if [ $? -ne 0 ] ; then
+  echo 'Please set an upstream remote.'
+  exit 3
+fi
+
+# ensure we're on master
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$current_branch" != "master" ]; then
+  echo 'Please switch to master branch.'
+  return 4
+fi
+
+# ensure working copy is clean
+if [[ -n $(git status -s) ]]; then
+  echo 'Please commit any unsaved changes.'
+  exit 5
 fi
 
 # get project name
@@ -27,9 +47,27 @@ for pr in $prs; do
   echo https://github.com/$project/issues/$pr
 done
 
-# ask for title
-read -p 'title: ' title
+if [[ $* == *--dry-run* ]]; then
+  echo 'Dry run, no PR created.'
+else
+  # ask for title
+  read -p 'title: ' title
 
-# create deploy PR
-message="Deploy: $title\n\n$body"
-echo $message | hub pull-request -b $project:release -h $project:master -F -
+  # create deploy PR
+  message="Deploy: $title\n\n$body"
+  pr_url=$(echo $message | hub pull-request -b $project:release -h $project:master -F -)
+
+
+  if [[ $* == *--no-merge ]]; then
+    echo $pr_url
+  else
+    # merge deploy PR
+    git checkout upstream/release --quiet
+    hub merge $pr_url --quiet > /dev/null 2>&1
+    git push upstream HEAD:release --quiet
+    git checkout master --quiet
+    echo 'Deployment PR merged.'
+  fi
+
+  echo $pr_url
+fi
