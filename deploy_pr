@@ -23,7 +23,7 @@ fi
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 if [ "$current_branch" != "master" ]; then
   echo 'Please switch to master branch.'
-  return 4
+  exit 4
 fi
 
 # ensure working copy is clean
