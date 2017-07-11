@@ -19,6 +19,19 @@ if [ $? -ne 0 ] ; then
   exit 3
 fi
 
+# ensure we're on master
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$current_branch" != "master" ]; then
+  echo 'Please switch to master branch.'
+  return 4
+fi
+
+# ensure working copy is clean
+if [[ -n $(git status -s) ]]; then
+  echo 'Please commit any unsaved changes.'
+  exit 5
+fi
+
 # get project name
 project=artsy/$(basename "$PWD")
 
