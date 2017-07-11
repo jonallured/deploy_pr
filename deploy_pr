@@ -34,9 +34,13 @@ for pr in $prs; do
   echo https://github.com/$project/issues/$pr
 done
 
-# ask for title
-read -p 'title: ' title
+if [[ $* == *--dry-run* ]]; then
+  echo 'Dry run, no PR created.'
+else
+  # ask for title
+  read -p 'title: ' title
 
-# create deploy PR
-message="Deploy: $title\n\n$body"
-echo $message | hub pull-request -b $project:release -h $project:master -F -
+  # create deploy PR
+  message="Deploy: $title\n\n$body"
+  echo $message | hub pull-request -b $project:release -h $project:master -F -
+fi
