@@ -55,5 +55,19 @@ else
 
   # create deploy PR
   message="Deploy: $title\n\n$body"
-  echo $message | hub pull-request -b $project:release -h $project:master -F -
+  pr_url=$(echo $message | hub pull-request -b $project:release -h $project:master -F -)
+
+
+  if [[ $* == *--no-merge ]]; then
+    echo $pr_url
+  else
+    # merge deploy PR
+    git checkout upstream/release --quiet
+    hub merge $pr_url --quiet > /dev/null 2>&1
+    git push upstream HEAD:release --quiet
+    git checkout master --quiet
+    echo 'Deployment PR merged.'
+  fi
+
+  echo $pr_url
 fi
