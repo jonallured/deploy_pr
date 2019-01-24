@@ -8,7 +8,7 @@ gives you a link to it.
 
 [hub]: https://github.com/github/hub
 
-## Install
+## Installation
 
 The easiest way to install is via homebrew:
 
@@ -19,3 +19,24 @@ $ brew install deploy_pr
 
 But as a simple script, it's also easy to just grab it and add to your PATH as
 you see fit.
+
+## Usage
+
+
+### Create a deployment PR
+
+```
+$ deploy_pr --no-merge
+```
+
+### Create a deployment PR & merge it immediately
+
+```
+$ deploy_pr
+```
+
+### View PRs that would be deployed, without creating a deployment PR
+
+```
+$ deploy_pr --dry-run
+```
