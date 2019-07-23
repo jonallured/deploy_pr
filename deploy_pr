@@ -19,10 +19,10 @@ if [ $? -ne 0 ] ; then
   exit 3
 fi
 
-# ensure we're on master
+# ensure we're on staging
 current_branch=$(git rev-parse --abbrev-ref HEAD)
-if [ "$current_branch" != "master" ]; then
-  echo 'Please switch to master branch.'
+if [ "$current_branch" != "staging" ]; then
+  echo 'Please switch to staging branch.'
   exit 4
 fi
 
@@ -39,7 +39,7 @@ project=artsy/$(basename "$PWD")
 git fetch upstream --quiet
 
 # show included PRs
-prs=$(git log upstream/release...upstream/master --merges --oneline --grep 'from artsy/master' --invert-grep | grep 'Merge pull request' | cut -d ' ' -f 5 | cut -d '#' -f 2)
+prs=$(git log upstream/release...upstream/staging --merges --oneline --grep 'from artsy/staging' --invert-grep | grep 'Merge pull request' | cut -d ' ' -f 5 | cut -d '#' -f 2)
 
 body="Included PRs:\n\n"
 for pr in $prs; do
@@ -55,7 +55,7 @@ else
 
   # create deploy PR
   message="Deploy: $title\n\n$body"
-  pr_url=$(echo $message | hub pull-request -b $project:release -h $project:master -F -)
+  pr_url=$(echo $message | hub pull-request -b $project:release -h $project:staging -F -)
 
 
   if [[ $* == *--no-merge ]]; then
@@ -65,7 +65,7 @@ else
     git checkout upstream/release --quiet
     hub merge $pr_url --quiet > /dev/null 2>&1
     git push upstream HEAD:release --quiet
-    git checkout master --quiet
+    git checkout staging --quiet
     echo 'Deployment PR merged.'
   fi
 
