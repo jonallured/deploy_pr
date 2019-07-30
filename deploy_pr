@@ -1,5 +1,13 @@
 #!/bin/sh
 
+version="0.0.7"
+
+# print version and exit
+if [[ $* == *--version ]]; then
+  echo $version
+  exit 0
+fi
+
 # ensure we're in a git repo
 if ! [ -d .git ]; then
   echo 'Please run from a git repo.'
@@ -20,7 +28,7 @@ if [ $? -ne 0 ] ; then
 fi
 
 # ensure we're on staging
-current_branch=$(git rev-parse --abbrev-ref HEAD)
+current_branch=$(git branch --show-current)
 if [ "$current_branch" != "staging" ]; then
   echo 'Please switch to staging branch.'
   exit 4
@@ -39,7 +47,7 @@ project=artsy/$(basename "$PWD")
 git fetch upstream --quiet
 
 # show included PRs
-prs=$(git log upstream/release...upstream/staging --merges --oneline --grep 'from artsy/master' --invert-grep | grep 'Merge pull request' | cut -d ' ' -f 5 | cut -d '#' -f 2)
+prs=$(git log upstream/release...upstream/staging --merges --oneline --grep 'from artsy/master' --grep 'from artsy/staging' --invert-grep | grep 'Merge pull request' | cut -d ' ' -f 5 | cut -d '#' -f 2)
 
 body="Included PRs:\n\n"
 for pr in $prs; do
