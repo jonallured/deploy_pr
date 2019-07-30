@@ -1,5 +1,13 @@
 #!/bin/sh
 
+version="0.0.6"
+
+# print version and exit
+if [[ $* == *--version ]]; then
+  echo $version
+  exit 0
+fi
+
 # ensure we're in a git repo
 if ! [ -d .git ]; then
   echo 'Please run from a git repo.'
