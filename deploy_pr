@@ -39,7 +39,7 @@ project=artsy/$(basename "$PWD")
 git fetch upstream --quiet
 
 # show included PRs
-prs=$(git log upstream/release...upstream/staging --merges --oneline --grep 'from artsy/master' --invert-grep | grep 'Merge pull request' | cut -d ' ' -f 5 | cut -d '#' -f 2)
+prs=$(git log upstream/release...upstream/staging --merges --oneline --grep 'from artsy/master' --grep 'from artsy/staging' --invert-grep | grep 'Merge pull request' | cut -d ' ' -f 5 | cut -d '#' -f 2)
 
 body="Included PRs:\n\n"
 for pr in $prs; do
