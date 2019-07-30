@@ -20,7 +20,7 @@ if [ $? -ne 0 ] ; then
 fi
 
 # ensure we're on staging
-current_branch=$(git rev-parse --abbrev-ref HEAD)
+current_branch=$(git branch --show-current)
 if [ "$current_branch" != "staging" ]; then
   echo 'Please switch to staging branch.'
   exit 4
